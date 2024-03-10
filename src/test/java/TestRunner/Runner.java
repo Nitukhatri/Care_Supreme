@@ -13,7 +13,7 @@ import io.cucumber.junit.CucumberOptions;
 		dryRun = false,
 		monochrome = true,
 	//	tags="@Regression or @Sanity",
-		plugin = {"pretty","html:target/cucumber-reports/AgeMemberSelection_result.html"}
+		plugin = {"pretty","html:target/cucumber-reports/Compelete_result.html"}
 		)
 
 
