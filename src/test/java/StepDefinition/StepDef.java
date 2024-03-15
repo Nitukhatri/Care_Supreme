@@ -1,10 +1,20 @@
 package StepDefinition;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
 import org.junit.Assert;
 import org.junit.validator.PublicClassValidator;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -13,7 +23,10 @@ import com.github.dockerjava.api.model.Driver;
 
 import PageObject.BuyNowPage;
 import PageObject.MobileToPincode;
+import Utilities.ReadConfig;
+import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -23,33 +36,74 @@ public class StepDef extends BaseClass {
 
 	@Before
 	public void setup() {
+		
 
-		WebDriverManager.chromedriver().setup();
-		driver = new ChromeDriver();
-		System.out.println("SetUp method.");
+	readConfig = new ReadConfig();
+		
+		//initialise logger
+		log = LogManager.getLogger("StepDef");
+
+	//	System.out.println("Setup-Sanity method executed..");
+
+		String browser = readConfig.getBrowser();
+		
+		//launch browser
+		switch(browser.toLowerCase())
+		{
+		case "chrome":
+			WebDriverManager.chromedriver().setup();
+			driver = new ChromeDriver();
+			break;
+
+		case "msedge":
+			WebDriverManager.edgedriver().setup();
+			driver = new EdgeDriver();
+			break;
+
+		case "firefox":
+			WebDriverManager.firefoxdriver().setup();
+			driver = new FirefoxDriver();
+			break;
+		default:
+			driver = null;
+			break;
+
+		}
+		
+		MobToPin = new MobileToPincode(driver);
+		BnP = new BuyNowPage(driver);
+		
+		log.info("SetUp Execution...");
+	
 
 	}
 
 	@Given("user launch chrome browser")
 	public void user_launch_chrome_browser() {
-		MobToPin = new MobileToPincode(driver);
-		BnP = new BuyNowPage(driver);
+		
 		driver.manage().window().maximize();
+		
+		log.info("user launch chrome browser.");
 	}
 
 	@When("User opens URL {string}")
 	public void user_opens_url(String url) {
 		driver.get(url);
+		log.info("User opens URL");
 	}
 
 	@When("User enters Mobile number as {string}")
 	public void user_enters_mobile_number_as(String mobNumber) {
 		MobToPin.EnterMobileno(mobNumber);
+		
+		log.info("User enters Mobile number.");
 	}
 
 	@When("Click on Calculate premium")
 	public void click_on_calculate_premium() {
 		MobToPin.ClickCalculatePremiumBtn();
+		
+		log.info("Click on Calculate premium.");
 	}
 
 	@Then("Section title should be {string}")
@@ -59,14 +113,18 @@ public class StepDef extends BaseClass {
 
 		if (ActualTitle.contains(ExpectedTitle)) {
 			Assert.assertTrue(true);
+			log.warn("Title matched.");
 		} else {
 			Assert.assertTrue(false);
+			log.warn("Title not matched.");
 		}
 	}
 
 	@Then("close browser")
 	public void close_browser() {
 		driver.quit();
+		
+		log.info("close browser.");
 	}
 
 	////////////////// INVAILD MOBILE NUMBER ERROR MESSAGE///////////////////////
@@ -78,8 +136,10 @@ public class StepDef extends BaseClass {
 
 		if (ActualError.contains(ExpectedError)) {
 			Assert.assertTrue(true);
+			log.warn("Error Message matched.");
 		} else {
 			Assert.assertTrue(false);
+			log.warn("Error Message not matched.");
 		}
 	}
 
@@ -89,6 +149,8 @@ public class StepDef extends BaseClass {
 	@When("Select member one {string}")
 	public void select_member_one(String Member) {
 
+		 driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
@@ -100,43 +162,52 @@ public class StepDef extends BaseClass {
 
 		case "self": {
 			System.out.println("Self already Selected.");
+			log.info("Select member one as Self");
 			break;
 
 		}
 		case "spouse": {
 			MobToPin.SelectSelf(); // unselecting default selected Self
 			MobToPin.SelectSpouse();
+			log.info("Select member one as spouse");
 			break;
 
 		}
 		case "father": {
 			MobToPin.SelectSelf(); // unselecting default selected Self
 			MobToPin.SelectFather();
+			log.info("Select member one as father");
 			break;
 
 		}
 		case "mother": {
 			MobToPin.SelectSelf(); // unselecting default selected Self
 			MobToPin.SelectMother();
+			log.info("Select member one as mother");
 			break;
 		}
 		case "father-in-law": {
 			MobToPin.SelectSelf(); // unselecting default selected Self
 			MobToPin.SelectfatherInLaw();
+			log.info("Select member one as father-in-law");
 			break;
 		}
 		case "mother-in-law": {
 			MobToPin.SelectSelf(); // unselecting default selected Self
 			MobToPin.SelectMotherInLaw();
+			log.info("Select member one as mother-in-law");
 			break;
 		}
 		}
 
+		
 	}
 
 	@When("Select member two {string}")
 	public void select_member_two(String Member) {
 
+		 driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
@@ -148,29 +219,35 @@ public class StepDef extends BaseClass {
 
 		case "self": {
 			MobToPin.SelectSelf();
+			log.info("Select member one as Self");
 			break;
 
 		}
 		case "spouse": {
 			MobToPin.SelectSpouse();
+			log.info("Select member one as spouse");
 			break;
 
 		}
 		case "father": {
 			MobToPin.SelectFather();
+			log.info("Select member one as father");
 			break;
 
 		}
 		case "mother": {
 			MobToPin.SelectMother();
+			log.info("Select member one as mother");
 			break;
 		}
 		case "father-in-law": {
 			MobToPin.SelectfatherInLaw();
+			log.info("Select member one as father-in-law");
 			break;
 		}
 		case "mother-in-law": {
 			MobToPin.SelectMotherInLaw();
+			log.info("Select member one as mother-in-law");
 			break;
 		}
 		}
@@ -181,6 +258,8 @@ public class StepDef extends BaseClass {
 	public void click_on_continue_button() {
 
 		MobToPin.ClickContinueBtn();
+		
+		log.info("Click on continue button");
 	}
 
 	@Then("Combination Error message should be {string}")
@@ -189,8 +268,10 @@ public class StepDef extends BaseClass {
 				.getText();
 		if (ActualError.contains(ExpectedError)) {
 			Assert.assertTrue(true);
+			log.warn("Combination Error message matched.");
 		} else {
 			Assert.assertTrue(false);
+			log.warn("Combination Error message not matched.");
 		}
 	}
 
@@ -203,17 +284,24 @@ public class StepDef extends BaseClass {
 				.getText();
 		if (ActualTitle.contains(ExpectedTitle)) {
 			Assert.assertTrue(true);
+			log.warn("Age Section title matched.");
 		} else {
 			Assert.assertTrue(false);
+			log.warn("Age Section title not matched.");
 		}
 	}
 	//////////////// four member positive scenario
 
 	@When("Select member one as {string} member two as {string} member three as {string}")
 	public void select_member_one_as_member_two_as_member_three_as(String spouse, String son, String daughter) {
+
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+ 
 		MobToPin.SelectSpouse();
 		MobToPin.SelectSon();
 		MobToPin.SelectDaughter();
+		
+		log.info("Select members for family policy");
 	}
 
 	/////////////////// Age Selection
@@ -226,11 +314,15 @@ public class StepDef extends BaseClass {
 		MobToPin.SelectSpouseAge(age2);
 		MobToPin.SelectSonAge(age3);
 		MobToPin.SelectDaughterAge(age4);
+		
+		log.info("Select members age.");
 	}
 
 	@When("Click on age countinue button")
 	public void click_on_age_countinue_button() {
 		MobToPin.ClickAgeContinuebtn();
+		
+		log.info("Click on age countinue button.");
 	}
 
 	@Then("Pincode Section title should be {string}")
@@ -239,8 +331,10 @@ public class StepDef extends BaseClass {
 		String ActualTitle = driver.findElement(By.xpath("//div[@class='step4 form-step Cr-PreQuote-City']")).getText();
 		if (ActualTitle.contains(ExpectedTitle)) {
 			Assert.assertTrue(true);
+			log.warn("Pincode Section title matched.");
 		} else {
 			Assert.assertTrue(false);
+			log.warn("Pincode Section title not matched.");
 		}
 	}
 
@@ -253,6 +347,7 @@ public class StepDef extends BaseClass {
 		 * try { Thread.sleep(3000); } catch (InterruptedException e) { // TODO
 		 * Auto-generated catch block e.printStackTrace(); }
 		 */
+		log.info("Enter Pincode.");
 	}
 
 	@When("Enter View Quote button")
@@ -262,6 +357,8 @@ public class StepDef extends BaseClass {
 		// 30).until(ExpectedConditions.elementToBeClickable(MobToPin.ViewQuoteBtn));
 
 		MobToPin.ClickViewQuoteBtn();
+		
+		log.info("Enter View Quote button.");
 	}
 
 	@Then("Buy Now page will open and title should be {string}")
@@ -279,56 +376,44 @@ public class StepDef extends BaseClass {
 		String ActualTitle = driver.findElement(By.xpath("//body//header//h2[@class='popup_heading']")).getText();
 		if (ActualTitle.contains(ExpectedTitle)) {
 			Assert.assertTrue(true);
+			log.warn("Buy Now page will open and title matched.");
 		} else {
 			Assert.assertTrue(false);
+			log.warn("Buy Now page will open and title not matched.");
 		}
 	}
+	
+	
+	@AfterStep
+	public void AfterStep_ForScreenshot(Scenario sc) {
+		
+		System.out.println("This is After Step after Tear Down Method.");
+		
+		if(sc.isFailed())
+		{
+			//Convert web driver object to TakeScreenshot
 
-	//////////////////// BUY NOW PAGE //////////////////
+			String fileWithPath = "C:\\Users\\ACER\\eclipse-workspace\\Cucumber_Framwork_Learning\\Failed_Scenario_Screenshots\\"+ sc.getName()+".png";
+			TakesScreenshot scrShot =((TakesScreenshot)driver);
 
-	String OldPremium = "";
+			//Call getScreenshotAs method to create image file
+			File SrcFile=scrShot.getScreenshotAs(OutputType.FILE);
 
-	@When("Total Coverage Slider move to select SI as {string}")
-	public void total_coverage_slider_move_to_select_si_as(String SI) {
-		switch (SI) {
-		case "7":
-			new Actions(driver).dragAndDropBy(BnP.Slider, 0, 0).perform();
-			break;
+			//Move image file to new destination
+			File DestFile=new File(fileWithPath);
 
-		case "10":
-			new Actions(driver).dragAndDropBy(BnP.Slider, 20, 0).perform();
-			break;
+			//Copy file at destination
 
-		case "15":
-			new Actions(driver).dragAndDropBy(BnP.Slider, 40, 0).perform();
-			break;
-
-		case "25":
-			new Actions(driver).dragAndDropBy(BnP.Slider, 60, 0).perform();
-			break;
-
-		case "50":
-			new Actions(driver).dragAndDropBy(BnP.Slider, 80, 0).perform();
-			break;
-
-		case "100":
-			new Actions(driver).dragAndDropBy(BnP.Slider, 100, 0).perform();
-			break;
-
-		default:
-			System.out.println("SI not in Option......");
-			break;
+			try {
+				FileUtils.copyFile(SrcFile, DestFile);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		log.info("Failed Test Case Screenshot...");
 
 	}
 
-	@Then("Total Premium should update")
-	public void total_premium_should_update() {
-		/*
-		 * String UpdatedPremium = BnP.TotalPremium.getText(); if
-		 * (UpdatedPremium.contentEquals(OldPremium)) { Assert.assertTrue(false); } else
-		 * { Assert.assertTrue(true); }
-		 */
-	}
 
 }

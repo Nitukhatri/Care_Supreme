@@ -16,7 +16,7 @@ Background: Scenarios Steps till now
 	And Enter View Quote button
 	Then Buy Now page will open and title should be "Your Quote"
 	
-Scenario: Pincode Scenario
+Scenario Outline: Pincode Scenario
 	When Total Coverage Slider move to select SI as "<SI>"
 	Then Total Premium should update
 	And close browser
