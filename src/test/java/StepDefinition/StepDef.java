@@ -101,6 +101,7 @@ public class StepDef extends BaseClass {
 
 	@When("Click on Calculate premium")
 	public void click_on_calculate_premium() {
+		
 		MobToPin.ClickCalculatePremiumBtn();
 		
 		log.info("Click on Calculate premium.");
@@ -158,6 +159,8 @@ public class StepDef extends BaseClass {
 			e.printStackTrace();
 		}
 
+	
+		
 		switch (Member) {
 
 		case "self": {
@@ -167,33 +170,43 @@ public class StepDef extends BaseClass {
 
 		}
 		case "spouse": {
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Self));
 			MobToPin.SelectSelf(); // unselecting default selected Self
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Spouse));
 			MobToPin.SelectSpouse();
 			log.info("Select member one as spouse");
 			break;
 
 		}
 		case "father": {
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Self));
 			MobToPin.SelectSelf(); // unselecting default selected Self
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Father));
 			MobToPin.SelectFather();
 			log.info("Select member one as father");
 			break;
 
 		}
 		case "mother": {
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Self));
 			MobToPin.SelectSelf(); // unselecting default selected Self
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Mother));
 			MobToPin.SelectMother();
 			log.info("Select member one as mother");
 			break;
 		}
 		case "father-in-law": {
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Self));
 			MobToPin.SelectSelf(); // unselecting default selected Self
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.FatherInLaw));
 			MobToPin.SelectfatherInLaw();
 			log.info("Select member one as father-in-law");
 			break;
 		}
 		case "mother-in-law": {
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Self));
 			MobToPin.SelectSelf(); // unselecting default selected Self
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.MotherInLaw));
 			MobToPin.SelectMotherInLaw();
 			log.info("Select member one as mother-in-law");
 			break;
@@ -218,34 +231,40 @@ public class StepDef extends BaseClass {
 		switch (Member) {
 
 		case "self": {
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Self));
 			MobToPin.SelectSelf();
 			log.info("Select member one as Self");
 			break;
 
 		}
 		case "spouse": {
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Spouse));
 			MobToPin.SelectSpouse();
 			log.info("Select member one as spouse");
 			break;
 
 		}
 		case "father": {
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Father));
 			MobToPin.SelectFather();
 			log.info("Select member one as father");
 			break;
 
 		}
 		case "mother": {
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Mother));
 			MobToPin.SelectMother();
 			log.info("Select member one as mother");
 			break;
 		}
 		case "father-in-law": {
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.FatherInLaw));
 			MobToPin.SelectfatherInLaw();
 			log.info("Select member one as father-in-law");
 			break;
 		}
 		case "mother-in-law": {
+			new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.MotherInLaw));
 			MobToPin.SelectMotherInLaw();
 			log.info("Select member one as mother-in-law");
 			break;
@@ -296,9 +315,11 @@ public class StepDef extends BaseClass {
 	public void select_member_one_as_member_two_as_member_three_as(String spouse, String son, String daughter) {
 
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
- 
+		new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Spouse));
 		MobToPin.SelectSpouse();
+		new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Son));
 		MobToPin.SelectSon();
+		new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.Daughter));
 		MobToPin.SelectDaughter();
 		
 		log.info("Select members for family policy");
@@ -320,6 +341,7 @@ public class StepDef extends BaseClass {
 
 	@When("Click on age countinue button")
 	public void click_on_age_countinue_button() {
+		new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.AgeContinuebtn));
 		MobToPin.ClickAgeContinuebtn();
 		
 		log.info("Click on age countinue button.");
@@ -353,8 +375,7 @@ public class StepDef extends BaseClass {
 	@When("Enter View Quote button")
 	public void enter_view_quote_button() {
 
-		// new WebDriverWait(driver,
-		// 30).until(ExpectedConditions.elementToBeClickable(MobToPin.ViewQuoteBtn));
+		new WebDriverWait(driver,30).until(ExpectedConditions.elementToBeClickable(MobToPin.ViewQuoteBtn));
 
 		MobToPin.ClickViewQuoteBtn();
 		

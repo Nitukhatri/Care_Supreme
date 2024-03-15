@@ -3,6 +3,8 @@ package StepDefinition;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import PageObject.BuyNowPage;
 import io.cucumber.java.en.Then;
@@ -20,8 +22,8 @@ public class StepDef_BuyNowPage extends BaseClass{
 	
 		BnP = new BuyNowPage(driver);
 		
-		 driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-   
+		// driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		new WebDriverWait(driver,30).until(ExpectedConditions.visibilityOf(BnP.Slider));
 		
 		switch (SI) {
 		case "7":
@@ -30,6 +32,7 @@ public class StepDef_BuyNowPage extends BaseClass{
 			break;
 
 		case "10":
+			new Actions(driver).dragAndDropBy(BnP.Slider, 0, 0).perform();
 			new Actions(driver).dragAndDropBy(BnP.Slider, 20, 0).perform();
 			log.info("SI 10L");
 			break;

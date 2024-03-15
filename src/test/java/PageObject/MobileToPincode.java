@@ -33,31 +33,31 @@ public class MobileToPincode {
 //////////////////For Member Selection
 
 	@FindBy(xpath = "//label[@for='self']")
-	WebElement Self;
+	public WebElement Self;
 
 	@FindBy(xpath = "//label[@for='spouse']")
-	WebElement Spouse;
+	public WebElement Spouse;
 
 	@FindBy(xpath = "//label[@for='son']")
-	WebElement Son;
+	public WebElement Son;
 
 	@FindBy(xpath = "//label[@for='daughter']")
-	WebElement Daughter;
+	public WebElement Daughter;
 
 	@FindBy(xpath = "//label[@for='father']")
-	WebElement Father;
+	public WebElement Father;
 
 	@FindBy(xpath = "//label[@for='mother']")
-	WebElement Mother;
+	public WebElement Mother;
 
 	@FindBy(xpath = "//label[@for='father-in-law']")
-	WebElement FatherInLaw;
+	public WebElement FatherInLaw;
 
 	@FindBy(xpath = "//label[@for='mother-in-law']")
-	WebElement MotherInLaw;
+	public WebElement MotherInLaw;
 
 	@FindBy(xpath = "//button[@class='btn_sticky_mobile btn_custom step2_continue custum_common_btn']")
-	WebElement ContinueBtn;
+	public WebElement ContinueBtn;
 
 	public void SelectSelf() {
 			Self.click();
@@ -111,7 +111,7 @@ public class MobileToPincode {
 	WebElement DaughterAge;
 	
 	@FindBy(xpath = "//button[@class='btn_sticky_mobile btn_custom step3_continue custum_common_btn']")
-	WebElement AgeContinuebtn;
+	public WebElement AgeContinuebtn;
 	
 	public void SelectSelfAge(String age)
 	{
